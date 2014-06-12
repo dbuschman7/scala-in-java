@@ -18,13 +18,15 @@ public class TestHarness {
 
         try {
             // Scala Dispatch Library
-            new DispatchScala("http://cayman-vm:8161", "admin", "admin").send(mailMessage);
+            String baseUrl = "http://localhost:9000";
+
+            new DispatchScala(baseUrl, "admin", "admin").send(mailMessage);
 
             // Java Async-Http-Client
-            new JavaClient("http://cayman-vm:8161", "admin", "admin").sendAsyncHttpClient(mailMessage);
+            new JavaClient(baseUrl, "admin", "admin").sendAsyncHttpClient(mailMessage);
 
             // Scala Dispatch From Java
-            new JavaClient("http://cayman-vm:8161", "admin", "admin").sendDispatchScala(mailMessage);
+            new JavaClient(baseUrl, "admin", "admin").sendDispatchJava(mailMessage);
 
         } catch (Throwable t) {
             t.printStackTrace();

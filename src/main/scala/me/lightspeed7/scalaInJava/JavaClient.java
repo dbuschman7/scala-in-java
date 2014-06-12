@@ -42,7 +42,7 @@ public class JavaClient {
                     .setScheme(AuthScheme.DIGEST).build();
 
             ListenableFuture<Response> f = asyncHttpClient//
-                    .preparePost(baseUrl + "/api/message/EMAIL.QUEUE?type=queue") //
+                    .preparePost(baseUrl + "/echo") //
                     .setHeader("Content-Type", "application/x-www-form-urlencoded")//
                     .setRealm(realm)//
                     .setBody(String.format("body=%s", mailMessage.marshal())) //
@@ -51,28 +51,26 @@ public class JavaClient {
             // wait for the response
             Response response = f.get();
             if (200 != response.getStatusCode()) {
-                throw new Exception("ActiveMQ returned statusCode = " + response.getStatusCode());
+                throw new Exception("Server returned statusCode = " + response.getStatusCode());
             }
 
             // print out the response body
             String body = response.getResponseBody();
-            System.out.println("body=" + body);
+            System.out.println("AsyncHttpClient(Java) -> " + body);
         }
 
     }
 
-    public void sendDispatchScala(MailMessage mailMessage)
+    public void sendDispatchJava(MailMessage mailMessage)
             throws Exception {
 
         // setup the query
-        Tuple2<String, String> tuple = new Tuple2<String, String>("body", mailMessage.marshal());
-
         @SuppressWarnings( "unchecked" )
         Map<String, String> map = scala.collection.immutable.Map$.MODULE$.<String, String> newBuilder()//
-                .$plus$eq(tuple)//
+                .$plus$eq(new Tuple2<String, String>("body", mailMessage.marshal()))//
                 .result();
 
-        Req req = dispatch.url.apply(baseUrl + "/api/message/EMAIL.QUEUE?type=queue")//
+        Req req = dispatch.url.apply(baseUrl + "/echo")//
                 .as(username, password)//
                 .setHeader("Content-Type", "application/x-www-form-urlencoded")//
                 .$less$less(map)//
@@ -80,17 +78,16 @@ public class JavaClient {
 
         // do the request
         Request request = req.toRequest();
-        System.out.println(request.toString());
         ListenableFuture<Response> listenableFuture = Http.apply$default$1().executeRequest(request);
 
         // do the future
         Response response = listenableFuture.get();
         if (200 != response.getStatusCode()) {
-            throw new Exception("ActiveMQ returned statusCode = " + response.getStatusCode());
+            throw new Exception("Server returned statusCode = " + response.getStatusCode());
         }
 
         // print out the response body
         String body = response.getResponseBody();
-        System.out.println("body=" + body);
+        System.out.println("Dispatch from Java    -> " + body);
     }
 }

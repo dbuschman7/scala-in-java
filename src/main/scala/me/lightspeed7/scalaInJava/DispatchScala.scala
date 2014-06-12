@@ -13,7 +13,6 @@ class DispatchScala(baseUrl: String, username: String, password: String) {
 
   import scala.concurrent.ExecutionContext.Implicits.global
   val executor: ExecutionContext = ExecutionContext.fromExecutorService(new ForkJoinPool());
-  val queueName: String = "EMAIL.QUEUE"
 
   def send(mailMessage: MailMessage) {
 
@@ -22,7 +21,7 @@ class DispatchScala(baseUrl: String, username: String, password: String) {
     import scala.util.{ Success, Failure }
 
     // setup the query
-    val svc = url(baseUrl + "/api/message/" + queueName + "?type=queue") //
+    val svc = url(baseUrl + "/echo") //
       .POST //
       .as(username, password) //
       .addHeader("Content-Type", "application/x-www-form-urlencoded") //
@@ -30,7 +29,7 @@ class DispatchScala(baseUrl: String, username: String, password: String) {
     // do the request and print out the response body
     val result = Http(svc << Map("body" -> mailMessage.marshal()) OK as.String) // set it up
     result onComplete {
-      case Success(s: String) => println(s)
+      case Success(resp: String) => println(s"Dispatch from Scala   -> $resp")
       case Failure(t) => println("An error has occured: " + t.getMessage)
     }
     result.apply
