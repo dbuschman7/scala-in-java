@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContextExecutorService
 import scala.concurrent.ExecutionContextExecutor
 import java.util.concurrent.ForkJoinPool
 
-class MailerRestHelper(baseUrl: String, username: String, password: String) {
+class DispatchScala(baseUrl: String, username: String, password: String) {
 
   import scala.concurrent.ExecutionContext.Implicits.global
   val executor: ExecutionContext = ExecutionContext.fromExecutorService(new ForkJoinPool());
@@ -17,7 +17,8 @@ class MailerRestHelper(baseUrl: String, username: String, password: String) {
 
   def send(mailMessage: MailMessage) {
 
-    import dispatch._, Defaults._
+    import dispatch._
+    import Defaults._
     import scala.util.{ Success, Failure }
 
     // setup the query

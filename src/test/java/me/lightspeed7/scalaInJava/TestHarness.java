@@ -2,7 +2,7 @@ package me.lightspeed7.scalaInJava;
 
 import org.junit.Test;
 
-public class MailMessageRestPostHarness {
+public class TestHarness {
 
     boolean scala = true;
 
@@ -18,13 +18,13 @@ public class MailMessageRestPostHarness {
 
         try {
             // Scala Dispatch Library
-            new MailerRestHelper("http://cayman-vm:8161", "admin", "admin").send(mailMessage);
+            new DispatchScala("http://cayman-vm:8161", "admin", "admin").send(mailMessage);
 
             // Java Async-Http-Client
-            new MailerRestClient("http://cayman-vm:8161", "admin", "admin").sendJava(mailMessage);
+            new JavaClient("http://cayman-vm:8161", "admin", "admin").sendAsyncHttpClient(mailMessage);
 
             // Scala Dispatch From Java
-            new MailerRestClient("http://cayman-vm:8161", "admin", "admin").sendScala(mailMessage);
+            new JavaClient("http://cayman-vm:8161", "admin", "admin").sendDispatchScala(mailMessage);
 
         } catch (Throwable t) {
             t.printStackTrace();

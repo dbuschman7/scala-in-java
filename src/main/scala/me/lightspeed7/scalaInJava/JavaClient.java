@@ -16,14 +16,14 @@ import com.ning.http.client.Response;
 import dispatch.Http;
 import dispatch.Req;
 
-public class MailerRestClient {
+public class JavaClient {
 
-    public static final org.slf4j.Logger log = LoggerFactory.getLogger(MailerRestClient.class);
+    public static final org.slf4j.Logger log = LoggerFactory.getLogger(JavaClient.class);
     private String baseUrl;
     private String username;
     private String password;
 
-    public MailerRestClient(String baseUrl, String username, String password) {
+    public JavaClient(String baseUrl, String username, String password) {
 
         this.baseUrl = baseUrl;
         this.username = username;
@@ -31,7 +31,7 @@ public class MailerRestClient {
 
     }
 
-    public void sendJava(MailMessage mailMessage)
+    public void sendAsyncHttpClient(MailMessage mailMessage)
             throws Exception {
 
         try (AsyncHttpClient asyncHttpClient = new AsyncHttpClient()) {
@@ -61,7 +61,7 @@ public class MailerRestClient {
 
     }
 
-    public void sendScala(MailMessage mailMessage)
+    public void sendDispatchScala(MailMessage mailMessage)
             throws Exception {
 
         // setup the query
